@@ -8,46 +8,56 @@ dotenv.config();
 
 const app = express();
 
-// Body parser
+// =======================
+// Middleware
+// =======================
 app.use(express.json());
 
-// CORS (uses env, fallback to your domain)
-const allowedOrigin = process.env.CLIENT_URL || "https://uniqeradigital.com";
 app.use(
   cors({
-    origin: [allowedOrigin],
+    origin: process.env.CLIENT_URL || "https://uniqeradigital.com",
     methods: ["GET", "POST"],
   })
 );
 
-// Health route (Render test)
+// =======================
+// BASIC ROUTES (IMPORTANT)
+// =======================
+app.get("/", (req, res) => {
+  res.status(200).send("Uniqera Backend is running ✅");
+});
+
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-// Routes
+// =======================
+// API ROUTES
+// =======================
 app.use("/api/leads", leadRoutes);
 
-// Port
+// =======================
+// START SERVER
+// =======================
 const PORT = process.env.PORT || 5000;
 
-// Start server with DB first
-const start = async () => {
+const startServer = async () => {
   try {
     console.log("ENV CHECK MONGODB_URI exists?", !!process.env.MONGODB_URI);
     console.log("ENV CHECK PORT =", PORT);
-    console.log("Connecting to MongoDB...");
 
+    console.log("Connecting to MongoDB...");
     await connectDB();
 
-    console.log("MongoDB connected. Starting server...");
+    console.log("MongoDB connected ✅");
+
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
     });
-  } catch (err) {
-    console.error("Startup failed:", err.message);
+  } catch (error) {
+    console.error("Startup failed ❌", error.message);
     process.exit(1);
   }
 };
 
-start();
+startServer();

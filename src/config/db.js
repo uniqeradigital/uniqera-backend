@@ -2,17 +2,13 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
-    const uri = process.env.MONGODB_URI;
-
-    if (!uri) {
-      throw new Error("MONGODB_URI is not defined in Render Environment Variables");
+    if (!process.env.MONGODB_URI) {
+      throw new Error("MONGODB_URI is missing");
     }
 
-    await mongoose.connect(uri);
-
-    console.log("✅ MongoDB connected");
+    await mongoose.connect(process.env.MONGODB_URI);
   } catch (error) {
-    console.error("❌ MongoDB connection failed:", error.message);
+    console.error("MongoDB connection failed ❌", error.message);
     throw error;
   }
 };
