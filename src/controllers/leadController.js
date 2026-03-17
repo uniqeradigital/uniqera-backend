@@ -5,7 +5,6 @@ export const createLead = async (req, res) => {
   try {
     const { name, email, phone, serviceType, message } = req.body;
 
-    // validation
     if (!name?.trim() || !email?.trim() || !phone?.trim() || !serviceType?.trim()) {
       return res.status(400).json({
         success: false,
@@ -14,11 +13,11 @@ export const createLead = async (req, res) => {
     }
 
     const lead = await Lead.create({
-      name,
-      email,
-      phone,
-      serviceType,
-      message,
+      name: name.trim(),
+      email: email.trim(),
+      phone: phone.trim(),
+      serviceType: serviceType.trim(),
+      message: message?.trim() || "",
     });
 
     return res.status(201).json({
@@ -27,7 +26,28 @@ export const createLead = async (req, res) => {
       leadId: lead._id,
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ success: false, message: "Server error" });
+    console.error("Create lead error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
+export const getLeads = async (req, res) => {
+  try {
+    const leads = await Lead.find().sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: leads.length,
+      data: leads,
+    });
+  } catch (error) {
+    console.error("Get leads error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 };
