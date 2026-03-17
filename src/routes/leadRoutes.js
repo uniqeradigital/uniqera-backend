@@ -1,5 +1,5 @@
 ﻿import express from "express";
-import { createLead } from "../controllers/leadCOntroller.js";
+import { createLead , getLeads } from "../controllers/leadCOntroller.js";
 
 const router = express.Router();
 
