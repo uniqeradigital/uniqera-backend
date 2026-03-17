@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
 
-const LeadSchema = new mongoose.Schema(
-    {
-    Name: String,
-    email: String,
-    phone: String,
-    company: String,
-    servitype:String,
-    },
-{timestamps: true}
+const leadSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true },
+    phone: { type: String, required: true },
+    serviceType: { type: String, required: true }, 
+    message: { type: String }, 
+  },
+  { timestamps: true }
 );
-export default mongoose.model("lead" , LeadSchema);
+
+export default mongoose.model("Lead", leadSchema);
