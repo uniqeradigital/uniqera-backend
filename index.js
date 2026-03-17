@@ -3,7 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./src/config/db.js";
 import leadRoutes from "./src/routes/leadRoutes.js";
-
+import applicationRoutes from "./src/routes/applicationRoutes.js";
 dotenv.config();
 
 const app = express();
@@ -11,6 +11,7 @@ const app = express();
 // =======================
 // Middleware
 // =======================
+
 app.use(express.json());
 
 app.use(
@@ -35,6 +36,7 @@ app.get("/health", (req, res) => {
 // API ROUTES
 // =======================
 app.use("/api/leads", leadRoutes);
+app.use("/api/applications", applicationRoutes);
 
 // =======================
 // START SERVER
